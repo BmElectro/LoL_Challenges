@@ -25,7 +25,7 @@ let sortObject = ref('')
 
 
 
-function sortChallengesToName(value:challengesData.CapstoneCategory, direction:string){
+function sortAllChallengesToName(value:challengesData.CapstoneCategory, direction:string){
     let newChallengesValue:challengesData.CapstoneCategory = {}
     if(direction == 'ascending'){
       for(let [key, _value] of Object.entries(value)){
@@ -39,7 +39,7 @@ function sortChallengesToName(value:challengesData.CapstoneCategory, direction:s
     console.log(newChallengesValue)
     return newChallengesValue
 }
-function sortChallengesToRank(value:challengesData.CapstoneCategory ,direction:string){
+function sortAllChallengesToRank(value:challengesData.CapstoneCategory ,direction:string){
   let newChallengesValue:challengesData.CapstoneCategory = {}
   for(let [key, _value] of Object.entries(value)){
     let challengesSortObject:{[key:string]: challengesData.Challenge[]} = {NONE:[],IRON:[],BRONZE:[],SILVER:[],GOLD:[],PLATINUM:[],DIAMOND:[],MASTER:[],GRANDMASTER:[],CHALLENGER:[]}
@@ -64,10 +64,10 @@ function sortChallengesAll(challenges:challengesData.RootObject){
     let objectToRender:challengesData.CapstoneCategory = {}
     for(const [key, value] of Object.entries(challenges)){
       if(method == 'name'){
-        let sortedChallenges = sortChallengesToName(value, direction)
+        let sortedChallenges = sortAllChallengesToName(value, direction)
         objectToRender = {...objectToRender, ...sortedChallenges}
       }else if(method == 'rank'){
-        let sortedChallenges = sortChallengesToRank(value, direction)
+        let sortedChallenges = sortAllChallengesToRank(value, direction)
         objectToRender = {...objectToRender, ...sortedChallenges}
       }else{
         objectToRender = {...objectToRender, ...value}
@@ -77,4 +77,23 @@ function sortChallengesAll(challenges:challengesData.RootObject){
     return objectToRender
 }
 
-export {sortObject, sortChallengesAll, sortOptions}
+
+function sortChallengesSingleCategory(category:challengesData.CapstoneCategory){
+  let [method, direction] = sortObject.value.split(' ')
+  let objectToRender:challengesData.CapstoneCategory = {}
+ 
+  if(method == 'name'){
+    let sortedChallenges = sortAllChallengesToName(category, direction)
+    objectToRender = sortedChallenges
+  }else if(method == 'rank'){
+    let sortedChallenges = sortAllChallengesToRank(category, direction)
+    objectToRender = sortedChallenges
+  }else{
+    objectToRender = category
+  }
+  
+  console.log(objectToRender)
+  return objectToRender
+}
+
+export {sortObject, sortChallengesAll, sortOptions, sortChallengesSingleCategory}

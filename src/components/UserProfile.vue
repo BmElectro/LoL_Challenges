@@ -35,7 +35,7 @@
 import Challenge from './Challenge.vue'
 import {ref, computed} from 'vue'
 import { challengesData } from '../assets/types'
-import { sortObject, sortChallengesAll, sortOptions} from '../composables/challengesSort'
+import { sortObject, sortChallengesAll, sortOptions, sortChallengesSingleCategory} from '../composables/challengesSort'
 import { NSelect } from 'naive-ui'
 const props = defineProps<{challenges:challengesData.RootObject}>()
 const challenges = props.challenges
@@ -58,7 +58,7 @@ const selectedCategoryRender = computed(()=>{
   }else{
     for(const [key, value] of Object.entries(challenges)){
       if(selectedCategory.value == key){
-        return value
+        return sortChallengesSingleCategory(value)
       }
     } 
   }
