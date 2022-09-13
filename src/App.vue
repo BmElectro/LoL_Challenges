@@ -1,25 +1,24 @@
 <template>
+  <n-config-provider :theme-overrides="themeOverrides">
+    <nav>
+      <div>
+        <span>Challenges</span>
+      </div>
+      <div>
+        <span v-if="summoner">Welcome {{summoner.name}}</span>
+      </div>
+      
 
-  <nav>
-    <div>
-      <span>Challenges</span>
-    </div>
-    <div>
-      <span>Welcome {{}}</span>
-    </div>
+    </nav>
+    <main v-if="!challengesReady">
+      <input type="text" v-model="summonerName" placeholder="Enter username">
+      <button @click="getChallengesForPlayer()">Get Challenges</button>
+    </main>
+
+
     
-
-  </nav>
-
-  <main v-if="!challengesReady">
-    <input type="text" v-model="summonerName" placeholder="Enter username">
-    <button @click="getChallengesForPlayer()">Get Challenges</button>
-  </main>
-
-
-  
-   <UserProfile v-else :challenges="challenges"/>
-
+    <UserProfile v-else :challenges="challenges"/>
+  </n-config-provider>
 </template>
   
 
@@ -34,7 +33,7 @@ import UserProfile from './components/UserProfile.vue'
 import { Summoner, challengesData, CategoryPoints, TotalPoints } from './assets/types'
 import { onMounted, ref } from 'vue'
 import { useChallengesStore } from './store/index'
-
+import { NConfigProvider, GlobalThemeOverrides, NSelect } from 'naive-ui'
 
 
 
@@ -68,11 +67,8 @@ async function getChallenges(challenge:challengesData.RootObject){
             for(let [capstoneName, capstoneChallenges] of  Object.entries(value)){
                 //console.log(i)
                 for(let challenge of capstoneChallenges){
-                    console.log(challenge.id)
-                    console.log(requestJson.challenges)
                     let [neededChall] = requestJson.challenges.filter((e: { challengeId: any }) => e.challengeId == challenge.id)
                     if(neededChall){
-                      console.log(neededChall)
                       challenge.percentile = neededChall.percentile
                       challenge.level = neededChall.level
                       challenge.value = neededChall.value
@@ -102,6 +98,38 @@ async function getChallengesForPlayer(){
   await getSummonerPUUID(summonerName.value)
   await getChallenges(playerChallenges.value)
   challengesReady.value = true
+}
+
+
+
+const themeOverrides: GlobalThemeOverrides = {
+  common: {
+    primaryColor: '#FFFFFF'
+  },
+  Select:{
+    peers:{
+      InternalSelection: {
+          color:'#363441',
+          border:'#8444c0',
+          textColor:'#FFFFFF',
+          borderActive:'#FFFFFF',
+          borderHover:'#8444c0',
+          borderFocus:'#8444c0',
+          colorActive: '#46465b',
+          boxShadowHover: '#8444c0'
+        },
+      InternalSelectMenu:{
+        color:'#363441',
+        optionTextColor:'#FFFFFF',
+        optionColorActive:'#46465b',
+        optionCheckColor:'#46465b',
+        optionColorPending:'#46465b',
+        optionColorActivePending:"#636381",
+
+      }
+        
+    }
+  }
 }
 </script>
 

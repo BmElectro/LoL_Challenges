@@ -9,12 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "fast-sort": "^3.2.0",
     "node-fetch": "^3.2.10",
     "pinia": "^2.0.21",
     "vue": "^3.2.37"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.3",
+    "naive-ui": "^2.33.2",
     "typescript": "^4.6.4",
     "vite": "^3.0.7",
     "vue-tsc": "^0.39.5"

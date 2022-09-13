@@ -3,7 +3,7 @@
         <span class="border-color" :class="challenge.level"></span>
         <div class="challenge-info-container">
             <div class="challenge-info"><span>{{getChallengeName()}}</span><span :class="'level'+challenge.level">{{challenge.level}}</span></div>
-            <span class="challenge-text">{{getChallengeText()}}</span>
+            <span class="challenge-text" v-html="getChallengeText()"></span>
             <img :src="getChallengeImg(id, challenge.level)" alt="" srcset="" style="height: 50px; width: 50px;">
             <div class="threshhold-container"><div class="threshold"></div>{{getThreshholdText(challenge.value, challenge.level, id)}}</div>
         </div>
@@ -91,7 +91,7 @@ const challenge = props.challenge
 const id = challenge.id
 
 function getChallengeText(){
-    return challenge.localizedNames.en_GB.description
+    return challenge.localizedNames.en_GB.shortDescription
 }
 function getChallengeName(){
     return challenge.localizedNames.en_GB.name

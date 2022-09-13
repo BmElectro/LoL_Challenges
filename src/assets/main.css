@@ -93,6 +93,7 @@ main input:focus{
     height: 90vh;;
     display: flex;
     width: 90%;
+    flex-direction: column;
 }
 .secondary-category-container{
     margin-top: 50px;
@@ -100,6 +101,17 @@ main input:focus{
     overflow: hidden;
     box-sizing: border-box;
     overflow: auto;
+}
+.category-header{
+    height: 80px;
+    display: flex;
+    align-items: center;
+    font-size: 17px;box-sizing: border-box;
+    padding: 0px 20px;
+}
+.category-header-select{
+    width: 135px;
+    margin-left: 10px;
 }
 .category-selector{
     height: 80vh;
@@ -200,8 +212,8 @@ main input:focus{
 .MASTER{
     background-color: rgb(117, 0, 153);
 }
-.GRAND{
-    background-color: rgb(95, 17, 49);
+.GRANDMASTER{
+    background-color: #701a1d;
 }
 
 

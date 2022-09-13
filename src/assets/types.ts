@@ -241,3 +241,8 @@ export declare module challengesData {
 
 }
 
+export interface SortObject{
+    
+    method: string
+    direction: string
+}

@@ -8,11 +8,15 @@
   
    
     <div class="category-container">
+      <div v-if="selectedCategory" class="category-header">
+        <label for="">Sort:</label>
+        <n-select class="category-header-select" v-model:value="sortObject" :options="sortOptions" size="small"></n-select>
+      </div>
       <div class="secondary-category-container">
         <div v-for="(capstone, key) in selectedCategoryRender" :key="key" style="display: flex; flex-direction: column; align-items: center;">
               <div class="category-title">{{key}}</div>
               <div class="challenge-container">
-                  <Challenge v-for="challenge in capstone" :challenge="challenge" :key="key" />
+                  <Challenge v-for="challenge in capstone" :challenge="challenge" :key="challenge.id" />
               </div>
           </div>
       </div>
@@ -30,10 +34,13 @@
 <script setup lang="ts">
 import Challenge from './Challenge.vue'
 import {ref, computed} from 'vue'
-import {challengesData } from '../assets/types'
-
+import { challengesData } from '../assets/types'
+import { sortObject, sortChallengesAll, sortOptions} from '../composables/challengesSort'
+import { NSelect } from 'naive-ui'
 const props = defineProps<{challenges:challengesData.RootObject}>()
 const challenges = props.challenges
+
+
 
 
 let selectedCategory = ref('')
@@ -43,13 +50,11 @@ function selectCategory(category: string){
   selectedCategory.value = category
 }
 
+
 const selectedCategoryRender = computed(()=>{
+
   if(selectedCategory.value == 'All'){
-    let objectToRender:challengesData.CapstoneCategory = {}
-    for(const [key, value] of Object.entries(challenges)){
-        objectToRender = {...objectToRender, ...value}
-    }
-    return objectToRender
+    return sortChallengesAll(challenges)
   }else{
     for(const [key, value] of Object.entries(challenges)){
       if(selectedCategory.value == key){
