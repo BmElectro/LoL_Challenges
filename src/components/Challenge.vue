@@ -4,15 +4,21 @@
         <div class="challenge-info-container">
             <div class="challenge-info"><span>{{getChallengeName()}}</span><span :class="'level'+challenge.level">{{challenge.level}}</span></div>
             <span class="challenge-text" v-html="getChallengeText()"></span>
-            <img :src="getChallengeImg(id, challenge.level)" alt="" srcset="" style="height: 50px; width: 50px;">
-            <div class="threshhold-container"><div class="threshold"></div>{{getThreshholdText(challenge.value, challenge.level, id)}}</div>
+            <div class="secondary-info-container">
+                <div class="challenge-img-progress">
+                    <n-progress class="challenge-progress" type="circle" :percentage="percentage" gap-position="bottom" :gap-degree="70" :height="100" :rail-color="'#292935'">
+                        <img :src="getChallengeImg(id, challenge.level)" alt="" srcset="" style="height: 50px; width: 50px;">
+                    </n-progress>
+                </div>
+                <div class="threshhold-container"><div class="threshold"></div>{{getThreshholdText(challenge.value, challenge.level, id)}}</div>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-
-
+import { NProgress } from 'naive-ui'
+import {onMounted, ref} from 'vue'
 interface LANG {
         description: string;
         name: string;
@@ -90,6 +96,7 @@ const challenge = props.challenge
 
 const id = challenge.id
 
+let percentage = ref(0)
 function getChallengeText(){
     return challenge.localizedNames.en_GB.shortDescription
 }
@@ -97,17 +104,29 @@ function getChallengeName(){
     return challenge.localizedNames.en_GB.name
 }
 
-function getChallengeImg(challengeId:number, level: string){ 
-    return `./challenges-images/${challengeId}-${level.toUpperCase()}.png`
+function getChallengeImg(challengeId:number, level: string){
+    if(level == 'NONE'){
+        return `./challenges-images/${challengeId}-IRON.png`
+    }else{
+        return `./challenges-images/${challengeId}-${level.toUpperCase()}.png`
+    }
 }
 function getThreshholdText(value: number, level: string, challengeId:number){
         let toReturn = ''
         if(Object.keys(challenge.thresholds).length == 1){
-            toReturn = value.toString()
+            toReturn =  `${value}/${challenge.thresholds[Object.keys(challenge.thresholds)[0]]?.value}`
         }else{
             switch (level) {
-                case 'Iron':
+                case 'IRON':
                     toReturn =  `${value}/${challenge.thresholds['BRONZE']?.value}`
+                    if(toReturn == '' || toReturn.includes('undefined')){
+                        let availableRanks = ['SILVER','GOLD','PLATINUM','DIAMOND','MASTER','GRANDMASTER','CHALLENGER']
+                        let currentIndex = 0
+                        while((toReturn == '' || toReturn.includes('undefined')) && currentIndex <= 6){
+                            toReturn =  `${value}/${challenge.thresholds[availableRanks[currentIndex]]?.value}`
+                            currentIndex++
+                        }
+                    }
                     break
                 case 'BRONZE':
                     toReturn =  `${value}/${challenge.thresholds['SILVER']?.value}`
@@ -143,6 +162,15 @@ function getThreshholdText(value: number, level: string, challengeId:number){
             return toReturn
         }
 }
+onMounted(()=>{
+    const [part, full] = getThreshholdText(challenge.value, challenge.level, id).split('/')
+    let calculatedPercentage = Math.round((parseFloat(part)/parseFloat(full))*100)
+    if(calculatedPercentage > 100 || calculatedPercentage == NaN){
+        percentage.value = 100
+    }else{
+        percentage.value = calculatedPercentage
+    }
+})
 </script>
 
 <style>

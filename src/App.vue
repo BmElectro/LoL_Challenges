@@ -17,7 +17,7 @@
 
 
     
-    <UserProfile v-else :challenges="challenges"/>
+    <UserProfile v-else :challenges="challenges" :totalPoints="playerTotalPoints" :category-points="playerCategoryPoints"/>
   </n-config-provider>
 </template>
   
