@@ -73,7 +73,7 @@ main input{
     font-size: 17px;
 }
 main input:focus{
-   border: 1px solid blueviolet;
+   border: 1px solid #2080f0;
    outline: none;
 }
 .challenge-page{
@@ -100,6 +100,7 @@ main input:focus{
     width: 90%;
     flex-direction: column;
 }
+
 .secondary-category-container{
     margin-top: 50px;
     height: 90%;
@@ -107,6 +108,18 @@ main input:focus{
     box-sizing: border-box;
     overflow: auto;
 }
+.secondary-category-container::-webkit-scrollbar{
+    background-color: #202124;
+    width: 0.5rem;
+}
+.secondary-category-container::-webkit-scrollbar-thumb{
+    background-color: #2080f0;
+    border-radius: 7px;
+}
+.secondary-category-container::-webkit-scrollbar-thumb:hover{
+    background-color: #2080f0;
+}
+
 .category-header{
     height: 80px;
     display: flex;
@@ -148,7 +161,7 @@ main input:focus{
     background-color: #ffffff3f;
     top: var(--category-selector-position-top);
     left: var(--category-selector-position-left);
-    transition: all 0.4s;
+    transition: all 0.3s;
     pointer-events: none;
 }
 .category-button{
@@ -185,7 +198,7 @@ main input:focus{
     width: 400px;
     align-items: center;
     gap: 15px;
-}
+
 }
 .challenge{
     width: 270px;
@@ -320,12 +333,12 @@ main input:focus{
     font-size: 0.8rem;
     border-color: rgb(117, 0, 153);
 }
-.levelGRAND{
+.levelGRANDMASTER{
     border: solid 1px;
     border-radius: 4px;
     padding: 3px;
     font-size: 0.8rem;
-    border-color: rgb(95, 17, 49);
+    border-color: #701a1d;
 }
 
 .clash-container{

@@ -13,6 +13,7 @@
           <label for="">Sort:</label>
           <n-select class="category-header-select" v-model:value="sortObject" :options="sortOptions" size="small"></n-select>
         </div>
+        <input type="text" placeholder="Search" v-model="searchTerm">
         <div v-if="categoryPoints && ['TEAMWORK','IMAGINATION','VETERANCY','COLLECTION','EXPERTISE'].includes(selectedCategory)" class="category-points-container">
           <span :class="'level'+getCategoryRank(selectedCategory)">{{getCategoryRank(selectedCategory)}}</span>
           <div class="category-points">
@@ -50,7 +51,7 @@
   
 <script setup lang="ts">
 import Challenge from './Challenge.vue'
-import {ref, computed} from 'vue'
+import {ref, computed, watch} from 'vue'
 import { challengesData, CategoryPoints, TotalPoints  } from '../assets/types'
 import { sortObject, sortChallengesAll, sortOptions, sortChallengesSingleCategory} from '../composables/challengesSort'
 import { NSelect, NProgress } from 'naive-ui'
@@ -67,8 +68,8 @@ const { largeCapstones } = challengesStore
 
 
 
-let selectedCategory = ref('')
-
+const selectedCategory = ref('')
+const searchTerm = ref('')
 
 function selectCategory(category: string){
   selectedCategory.value = category
@@ -91,13 +92,10 @@ function getCategoryPercentage(value:number, full:number){
   return Math.round((value/full)*100)
 }
 function getCategoryNextThreshold(selectedCategory: string){
-  console.log(categoryPoints, largeCapstones)
   if(largeCapstones && categoryPoints){
     for(let challenge of largeCapstones){
-      console.log(challenge.localizedNames)
 
       if(challenge.localizedNames?.en_GB.name == selectedCategory){
-        console.log(categoryPoints[selectedCategory as keyof typeof categoryPoints].level)
         switch (categoryPoints[selectedCategory as keyof typeof categoryPoints].level) {
                 case 'IRON':
                     return `${challenge.thresholds['BRONZE']}`
@@ -137,14 +135,43 @@ function getCategoryRank(selectedCategory: string){
     return categoryPoints[selectedCategory as keyof typeof categoryPoints].level
   }
 }
+function filterChallengesBySearch(capstone: challengesData.CapstoneCategory){
+  let newCapstone:challengesData.CapstoneCategory = {}
+  let neededChallenges:challengesData.Challenge[] = []
+  for (let [key, value] of Object.entries(capstone)){
+    neededChallenges = []
+    for (let challenge of value){
+      if(challenge.name.toLocaleLowerCase().includes(searchTerm.value.toLocaleLowerCase())  || 
+        challenge.localizedNames.en_GB.shortDescription.toLocaleLowerCase().includes(searchTerm.value.toLocaleLowerCase()) ||
+        challenge.localizedNames.en_GB.description.toLocaleLowerCase().includes(searchTerm.value.toLocaleLowerCase()) ||
+        challenge.localizedNames.en_GB.name.toLocaleLowerCase().includes(searchTerm.value.toLocaleLowerCase())
+      ){
+        neededChallenges.push(challenge)
+      }
+    }
+    console.log(neededChallenges, searchTerm.value)
+    if(neededChallenges.length != 0){
+      newCapstone[key] = neededChallenges
+    }
+  }
+  return newCapstone
+}
 const selectedCategoryRender = computed(()=>{
 
   if(selectedCategory.value == 'All'){
-    return sortChallengesAll(challenges)
+    if(searchTerm.value == ''){
+      return sortChallengesAll(challenges)
+    }else{
+      return filterChallengesBySearch(sortChallengesAll(challenges))
+    }
   }else{
     for(const [key, value] of Object.entries(challenges)){
       if(selectedCategory.value == key){
-        return sortChallengesSingleCategory(value)
+        if(searchTerm.value == ''){
+          return sortChallengesSingleCategory(value)
+        }else{
+          return filterChallengesBySearch(sortChallengesSingleCategory(value))
+        }
       }
     } 
   }
@@ -157,6 +184,8 @@ const categoryButtons = computed(()=>{
   categories.push('All')
   return categories
 })
+
+
 
 </script> 
 <style>

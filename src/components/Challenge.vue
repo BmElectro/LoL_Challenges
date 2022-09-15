@@ -117,6 +117,17 @@ function getThreshholdText(value: number, level: string, challengeId:number){
             toReturn =  `${value}/${challenge.thresholds[Object.keys(challenge.thresholds)[0]]?.value}`
         }else{
             switch (level) {
+                case 'NONE':
+                    toReturn =  `${value}/${challenge.thresholds['IRON']?.value}`
+                    if(toReturn == '' || toReturn.includes('undefined')){
+                        let availableRanks = ['SILVER','GOLD','PLATINUM','DIAMOND','MASTER','GRANDMASTER','CHALLENGER']
+                        let currentIndex = 0
+                        while((toReturn == '' || toReturn.includes('undefined')) && currentIndex <= 6){
+                            toReturn =  `${value}/${challenge.thresholds[availableRanks[currentIndex]]?.value}`
+                            currentIndex++
+                        }
+                    }
+                    break
                 case 'IRON':
                     toReturn =  `${value}/${challenge.thresholds['BRONZE']?.value}`
                     if(toReturn == '' || toReturn.includes('undefined')){
