@@ -229,6 +229,8 @@ export declare module challengesData {
         value: number;
         achievedTime: any;
         localizedNames: LocalizedNames;
+        idListType: string,
+        ids: number[]
     }
 
     export interface CapstoneCategory{

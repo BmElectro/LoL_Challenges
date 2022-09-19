@@ -2,6 +2,21 @@
   <main>
 
     <div class="category-selector">
+        <div class="totat-point-display" v-if="totalPoints">
+          <n-progress
+            indicator-placement="inside"
+            type="circle"
+            :percentage="getCategoryPercentage(totalPoints.current,
+              parseFloat(getTotalPointsThreshold()||'0'))
+            "
+            :rail-color="'#292935'" gap-position="bottom" :gap-degree="70" class="total-point-progress">
+            <div class="total-points-text">
+              <span :class="'level'+totalPoints.level">{{totalPoints.level}}</span>
+              <span>{{totalPoints.current + '/' + getTotalPointsThreshold()}}</span>
+            </div>
+
+          </n-progress>
+        </div>
         <div v-for="category in categoryButtons" :key="category" :id="category" @click="selectCategory(category)" class="category-button" @mouseenter="animateHoverRect(category)" :class="{selected: category == selectedCategory}">{{category}}</div>
     </div>
 
@@ -128,6 +143,40 @@ function getCategoryNextThreshold(selectedCategory: string){
             }
       }
     }
+  }
+}
+function getTotalPointsThreshold(){
+  const level = totalPoints?.level
+  if(level && largeCapstones){
+    switch (level) {
+                case 'IRON':
+                    return `${largeCapstones[0].thresholds['BRONZE']}`
+                case 'BRONZE':
+                  return `${largeCapstones[0].thresholds['SILVER']}`
+                    
+                case 'SILVER':
+                return `${largeCapstones[0].thresholds['GOLD']}`
+                    
+                case 'GOLD':
+                return `${largeCapstones[0].thresholds['PLATINUM']}`
+                    
+                case 'PLATINUM':
+                return  `${largeCapstones[0].thresholds['DIAMOND']}`
+                    
+                case 'DIAMOND':
+                return `${largeCapstones[0].thresholds['MASTER']}`
+                    
+                case 'MASTER':
+                return `${largeCapstones[0].thresholds['GRANDMASTER']}`
+                    
+                case 'GRANDMASTER':
+                return  `${largeCapstones[0].thresholds['CHALLENGER']}`
+                    
+                case 'CHALLENGER':
+                return  `${largeCapstones[0].thresholds['CHALLENGER']}`
+                default:
+                    break;
+            }
   }
 }
 function getCategoryRank(selectedCategory: string){

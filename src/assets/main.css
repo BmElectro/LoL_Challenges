@@ -562,3 +562,29 @@ main input:focus{
     width: 60px;
     height: 60px;
 }
+.total-point-display{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100px;
+
+}
+.total-point-progress{
+
+}
+.totat-point-display > .n-progress.n-progress--circle, .n-progress.n-progress--dashboard{
+    width: 168px !important;
+    margin-bottom: 50px;
+}
+.total-points-text{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+.total-points-text > :nth-child(1){
+    font-size: 15px;
+    padding: 7px 20px;
+}
