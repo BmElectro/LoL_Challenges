@@ -15,11 +15,14 @@
     <div class="starting-page" v-if="!challengesReady">
       <input type="text" v-model="summonerName" placeholder="Search Summoner" @keyup.enter="getChallengesForPlayer()">
       <!-- <button @click="getChallengesForPlayer()">Get Challenges</button> -->
-      <n-spin class="main-page-loading" v-if="showLoading" :show="showLoading" size="large">
+      <n-spin class="main-page-loading" v-if="showLoading && !summonerFetchError" :show="showLoading" size="large">
       <template #description>
         Loading {{summonerName}}
       </template>
     </n-spin>
+    <span  class="main-page-loading"  v-if="summonerFetchError">
+      {{summonerFetchError}}
+    </span>
     </div>
 
 
@@ -56,14 +59,23 @@ let playerChallenges = ref<challengesData.RootObject>({})
 let playerCategoryPoints = ref<CategoryPoints>()
 let playerTotalPoints = ref<TotalPoints>()
 let showLoading = ref(false)
-
+let summonerFetchError = ref('')
 
 let challengesReady = ref(false)
 
 async function getSummonerPUUID(summonerName: string){
   if(summonerName){
     const request = await fetch(`/api/getSummoner?summonerName=${summonerName}`)
-    summoner.value = await request.json()
+    const result = await request.json()
+    if(result.status){
+      if(result.status.status_code == 404 || result.status.message == 'Data not found - summoner not found'){
+        summonerFetchError.value = result.status.message
+        throw new Error(result.status.message);
+      }
+    }
+    else{
+        summoner.value = result
+    }
   }
 }
 async function getChallenges(challenge:challengesData.RootObject){
@@ -93,7 +105,6 @@ async function getChallenges(challenge:challengesData.RootObject){
   challenges.value = challenge
   playerCategoryPoints.value = requestJson.categoryPoints
   playerTotalPoints.value = requestJson.totalPoints
-  console.log(playerTotalPoints.value)
   return
 }
 
@@ -104,12 +115,18 @@ onMounted(async ()=>{
   
 })
 async function getChallengesForPlayer(){
-  challengesReady.value = false
-  showLoading.value = true
-  await getSummonerPUUID(summonerName.value)
-  await getChallenges(playerChallenges.value)
-  showLoading.value = false
-  challengesReady.value = true
+  try {
+    summonerFetchError.value = ''
+    challengesReady.value = false
+    showLoading.value = true
+    await getSummonerPUUID(summonerName.value)
+    await getChallenges(playerChallenges.value)
+    showLoading.value = false
+    challengesReady.value = true
+  } catch (error) {
+    console.log(error)
+  }
+
 }
 
 

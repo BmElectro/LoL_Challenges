@@ -21,7 +21,7 @@ const sortOptions = [
       value:'rank ascending'
     }
   ]
-let sortObject = ref('')
+let sortObject = ref('rank descending')
 
 
 
@@ -36,7 +36,6 @@ function sortAllChallengesToName(value:challengesData.CapstoneCategory, directio
         newChallengesValue[key] = sort(Object.values(_value)).by([{desc: e => e['name' as keyof typeof e]}])
       }
     }
-    console.log(newChallengesValue)
     return newChallengesValue
 }
 function sortAllChallengesToRank(value:challengesData.CapstoneCategory ,direction:string){
@@ -73,7 +72,6 @@ function sortChallengesAll(challenges:challengesData.RootObject){
         objectToRender = {...objectToRender, ...value}
       }
     }
-    console.log(objectToRender)
     return objectToRender
 }
 
@@ -91,8 +89,6 @@ function sortChallengesSingleCategory(category:challengesData.CapstoneCategory){
   }else{
     objectToRender = category
   }
-  
-  console.log(objectToRender)
   return objectToRender
 }
 
