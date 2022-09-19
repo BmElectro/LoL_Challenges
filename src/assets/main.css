@@ -451,3 +451,114 @@ main input:focus{
 
 
 }
+/* .challenge-large-container{
+    height: 500px;
+    width: 500px;
+    color: whitesmoke;
+} */
+.challenge-large{
+    width: 50%;
+    height: 100%;
+    min-height: 500px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    background-color: #202124;
+    color: whitesmoke;
+    border-radius: 7px;
+
+}
+.challenge-info-container-large{
+    height: 100%;
+    width: 100%;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #202124;
+    /* box-shadow: #ffffff1c 0 0 4px 1px; */
+    box-sizing: border-box;
+    padding: 20px;
+    gap: 10px;
+}
+.challenge-info-container-large-header{
+    display: flex;
+    font-size: large;
+}
+.challenge-large-header-info-left{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    gap: 20px;
+    box-sizing: border-box;
+    padding-right: 35px;
+}
+.challenge-large-header-info-right{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    gap: 20px;
+    font-size: initial;
+}
+.challenge-img-progress-large{
+    width: 80%;
+    /* position: relative; */
+    height: 75px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+}
+.challenge-img-progress-large-img{
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.challenge-progress-large{
+
+}
+.challenge-info-container-large-body{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+
+
+.challenge-info-section-title{
+    color: aqua;
+}
+.champs-list-container{
+    display: flex;
+    gap: 20px;
+    overflow: auto;
+    flex-wrap: wrap;
+    height: 200px;
+}
+.champs-list-container::-webkit-scrollbar{
+    background-color: #202124;
+    width: 0.5rem;
+}
+.champs-list-container::-webkit-scrollbar-thumb{
+    background-color: #2080f0;
+    border-radius: 7px;
+}
+.champs-list-container::-webkit-scrollbar-thumb:hover{
+    background-color: #2080f0;
+}
+.champ-challenge-large{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.champ-challenge-large > img{
+    width: 60px;
+    height: 60px;
+}

@@ -10,6 +10,7 @@ export const useChallengesStore = defineStore('challenges', () => {
     const challengesConfig = ref<ChallengeConfigs.ChallengeConfigsObject>({})
     const playerChallenges = ref<challengesData.RootObject>()
     const largeCapstones = ref<ChallengeConfigs.ChallengeConfig[]>()
+    const champIds = ref<{[key:string]: string}>()
     largeCapstones.value = []
     
 
@@ -45,6 +46,6 @@ export const useChallengesStore = defineStore('challenges', () => {
         return correctStuff
         //console.log(challengesConfig.value)
     }
-    
-    return { challengesConfig, getChallengesConfig , playerChallenges, largeCapstones}
+
+    return { challengesConfig, getChallengesConfig , playerChallenges, largeCapstones, }
   })

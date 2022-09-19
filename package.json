@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.6",
     "fast-sort": "^3.2.0",
     "node-fetch": "^3.2.10",
     "pinia": "^2.0.21",

@@ -11,7 +11,7 @@
 
     </nav>
     <main v-if="!challengesReady">
-      <input type="text" v-model="summonerName" placeholder="Enter username">
+      <input type="text" v-model="summonerName" placeholder="Enter username" @keyup.enter="getChallengesForPlayer()">
       <button @click="getChallengesForPlayer()">Get Challenges</button>
     </main>
 
@@ -92,7 +92,7 @@ async function getChallenges(challenge:challengesData.RootObject){
 onMounted(async ()=>{
   console.log('mounted')
   playerChallenges.value = await getChallengesConfig()
-
+  
 })
 async function getChallengesForPlayer(){
   await getSummonerPUUID(summonerName.value)
