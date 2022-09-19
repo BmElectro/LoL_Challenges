@@ -161,7 +161,7 @@ main input:focus{
     background-color: #ffffff3f;
     top: var(--category-selector-position-top);
     left: var(--category-selector-position-left);
-    transition: all 0.3s;
+    transition: all 0.2s ease-in-out;
     pointer-events: none;
 }
 .category-button{
