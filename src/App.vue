@@ -4,20 +4,28 @@
       <div>
         <span>Challenges</span>
       </div>
-      <div>
-        <span v-if="summoner">Welcome {{summoner.name}}</span>
+      <div v-if="challengesReady">
+        <input type="text" v-model="summonerName" placeholder="Search Summoner" @keyup.enter="getChallengesForPlayer()">
       </div>
-      
+      <div>
+        <span v-if="summoner">{{summoner.name}}</span>
+      </div>
 
     </nav>
-    <main v-if="!challengesReady">
-      <input type="text" v-model="summonerName" placeholder="Enter username" @keyup.enter="getChallengesForPlayer()">
-      <button @click="getChallengesForPlayer()">Get Challenges</button>
-    </main>
+    <div class="starting-page" v-if="!challengesReady">
+      <input type="text" v-model="summonerName" placeholder="Search Summoner" @keyup.enter="getChallengesForPlayer()">
+      <!-- <button @click="getChallengesForPlayer()">Get Challenges</button> -->
+      <n-spin class="main-page-loading" v-if="showLoading" :show="showLoading" size="large">
+      <template #description>
+        Loading {{summonerName}}
+      </template>
+    </n-spin>
+    </div>
 
 
     
-    <UserProfile v-else :challenges="challenges" :totalPoints="playerTotalPoints" :category-points="playerCategoryPoints"/>
+    <UserProfile v-else-if="!showLoading && challengesReady" :challenges="challenges" :totalPoints="playerTotalPoints" :category-points="playerCategoryPoints"/>
+
   </n-config-provider>
 </template>
   
@@ -33,7 +41,7 @@ import UserProfile from './components/UserProfile.vue'
 import { Summoner, challengesData, CategoryPoints, TotalPoints } from './assets/types'
 import { onMounted, ref } from 'vue'
 import { useChallengesStore } from './store/index'
-import { NConfigProvider, GlobalThemeOverrides, NSelect } from 'naive-ui'
+import { NConfigProvider, GlobalThemeOverrides, NSpin } from 'naive-ui'
 
 
 
@@ -47,7 +55,7 @@ let challenges = ref<challengesData.RootObject>({})
 let playerChallenges = ref<challengesData.RootObject>({})
 let playerCategoryPoints = ref<CategoryPoints>()
 let playerTotalPoints = ref<TotalPoints>()
-
+let showLoading = ref(false)
 
 
 let challengesReady = ref(false)
@@ -85,6 +93,7 @@ async function getChallenges(challenge:challengesData.RootObject){
   challenges.value = challenge
   playerCategoryPoints.value = requestJson.categoryPoints
   playerTotalPoints.value = requestJson.totalPoints
+  console.log(playerTotalPoints.value)
   return
 }
 
@@ -95,8 +104,11 @@ onMounted(async ()=>{
   
 })
 async function getChallengesForPlayer(){
+  challengesReady.value = false
+  showLoading.value = true
   await getSummonerPUUID(summonerName.value)
   await getChallenges(playerChallenges.value)
+  showLoading.value = false
   challengesReady.value = true
 }
 

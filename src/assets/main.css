@@ -10,7 +10,7 @@
 }
 nav{
     box-sizing: border-box;
-    padding: 20px 90px;
+    padding: 10px 90px;
     display: flex;
     gap: 30px;
     box-sizing: border-box;
@@ -18,7 +18,9 @@ nav{
     color: whitesmoke;
     background-color: #202124;
     justify-content: space-between;
-    box-shadow: #ffffff1c 0 0 4px 1px
+    box-shadow: #ffffff1c 0 0 4px 1px;
+    align-items: center;
+    font-size: 17px;
 }
 nav > a{
     color: white;
@@ -73,6 +75,41 @@ main input{
     font-size: 17px;
 }
 main input:focus{
+   border: 1px solid #2080f0;
+   outline: none;
+}
+
+.starting-page input{
+    background-color: hsl(0, 0%, 25%);
+    border: 1px solid hsl(0, 0%, 25%);
+    height: 40px;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 10px 10px 5px 10px;
+    border-radius: 7px;
+    margin: 20px;
+    color: whitesmoke;
+    font-size: 17px;
+}
+.starting-page input:focus{
+   border: 1px solid #2080f0;
+   outline: none;
+}
+nav input{
+    background-color: hsl(0, 0%, 25%);
+    border: 1px solid hsl(0, 0%, 25%);
+    height: 25px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 10px 15px 10px;
+    border-radius: 7px;
+    margin: 0px;
+    color: whitesmoke;
+    font-size: 17px;
+    box-sizing: border-box;
+    display: block;
+}
+nav input:focus{
    border: 1px solid #2080f0;
    outline: none;
 }
@@ -587,4 +624,22 @@ main input:focus{
 .total-points-text > :nth-child(1){
     font-size: 15px;
     padding: 7px 20px;
+}
+.starting-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+.main-page-loading{
+    margin-top: 100px;
+    color: whitesmoke;
+    gap: 30px;
+    font-size: 17px;
+}
+.main-page-loading > .n-spin{
+    color: #2080f0 !important;
+    width: 170px;
+    height: 170px;
 }

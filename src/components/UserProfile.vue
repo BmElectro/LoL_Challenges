@@ -28,7 +28,7 @@
           <label for="">Sort:</label>
           <n-select class="category-header-select" v-model:value="sortObject" :options="sortOptions" size="small"></n-select>
         </div>
-        <input type="text" placeholder="Search" v-model="searchTerm">
+        <input type="text" placeholder="Search Challenges" v-model="searchTerm">
         <div v-if="categoryPoints && ['TEAMWORK','IMAGINATION','VETERANCY','COLLECTION','EXPERTISE'].includes(selectedCategory)" class="category-points-container">
           <span :class="'level'+getCategoryRank(selectedCategory)">{{getCategoryRank(selectedCategory)}}</span>
           <div class="category-points">
@@ -66,17 +66,22 @@
   
 <script setup lang="ts">
 import Challenge from './Challenge.vue'
-import {ref, computed, watch} from 'vue'
+import {ref, computed, watch, toRefs} from 'vue'
 import { challengesData, CategoryPoints, TotalPoints  } from '../assets/types'
 import { sortObject, sortChallengesAll, sortOptions, sortChallengesSingleCategory} from '../composables/challengesSort'
 import { NSelect, NProgress } from 'naive-ui'
 import { useChallengesStore } from '../store/index'
-import { storeToRefs } from 'pinia'
+
+
 const props = defineProps<{challenges:challengesData.RootObject, categoryPoints:CategoryPoints|undefined, totalPoints:TotalPoints|undefined }>()
 const challenges = props.challenges
-const categoryPoints = props.categoryPoints
-const totalPoints = props.totalPoints
+// const categoryPoints = props.categoryPoints
+// const totalPoints = props.totalPoints
 
+const  propRefs  = toRefs(props)
+//onst challenges = propRefs.challenges
+const categoryPoints = propRefs.categoryPoints
+const totalPoints = propRefs.totalPoints
 
 const challengesStore = useChallengesStore()
 const { largeCapstones } = challengesStore
@@ -85,6 +90,7 @@ const { largeCapstones } = challengesStore
 
 const selectedCategory = ref('')
 const searchTerm = ref('')
+
 
 function selectCategory(category: string){
   selectedCategory.value = category
@@ -99,7 +105,7 @@ function animateHoverRect(category: string){
   const rect = categoryButton?.getClientRects()
   // console.log(rect)
   if(rect){
-    document.documentElement.style.setProperty('--category-selector-position-top', (rect[0].top - 110).toString()+'px')
+    document.documentElement.style.setProperty('--category-selector-position-top', (rect[0].top - 105).toString()+'px')
     document.documentElement.style.setProperty('--category-selector-position-left', rect[0].left.toString()+'px')
   }
 }
@@ -107,11 +113,11 @@ function getCategoryPercentage(value:number, full:number){
   return Math.round((value/full)*100)
 }
 function getCategoryNextThreshold(selectedCategory: string){
-  if(largeCapstones && categoryPoints){
+  if(largeCapstones && categoryPoints.value){
     for(let challenge of largeCapstones){
 
       if(challenge.localizedNames?.en_GB.name == selectedCategory){
-        switch (categoryPoints[selectedCategory as keyof typeof categoryPoints].level) {
+        switch (categoryPoints.value[selectedCategory as keyof typeof categoryPoints.value].level) {
                 case 'IRON':
                     return `${challenge.thresholds['BRONZE']}`
                 case 'BRONZE':
@@ -146,7 +152,7 @@ function getCategoryNextThreshold(selectedCategory: string){
   }
 }
 function getTotalPointsThreshold(){
-  const level = totalPoints?.level
+  const level = totalPoints.value?.level
   if(level && largeCapstones){
     switch (level) {
                 case 'IRON':
@@ -180,8 +186,8 @@ function getTotalPointsThreshold(){
   }
 }
 function getCategoryRank(selectedCategory: string){
-  if(categoryPoints){
-    return categoryPoints[selectedCategory as keyof typeof categoryPoints].level
+  if(categoryPoints.value){
+    return categoryPoints.value[selectedCategory as keyof typeof categoryPoints.value].level
   }
 }
 function filterChallengesBySearch(capstone: challengesData.CapstoneCategory){
